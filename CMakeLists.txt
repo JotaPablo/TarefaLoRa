@@ -35,7 +35,17 @@ pico_sdk_init()
 
 # Add executable. Default name is the project name, version 0.1
 
-add_executable(LoRa LoRa.c )
+add_executable(LoRa LoRa.c 
+        lib/button/button.c # Button library
+        lib/led/led.c # LED library
+        lib/ssd1306/ssd1306.c # SSD1306 library
+        lib/ssd1306/display.c # Display library
+        lib/buzzer/buzzer.c # Buzzer library)
+        lib/matrix_leds/neopixel.c # Matrix LEDs library
+        lib/sensors/ahto20/aht20.c # AHT20 sensor library
+        lib/sensors/bmp280/bmp280.c # BMP280 sensor library
+        lib/rfm95/rfm95.c
+        )
 
 pico_set_program_name(LoRa "LoRa")
 pico_set_program_version(LoRa "0.1")
@@ -53,9 +63,17 @@ target_include_directories(LoRa PRIVATE
         ${CMAKE_CURRENT_LIST_DIR}
 )
 
+pico_generate_pio_header(LoRa ${CMAKE_CURRENT_LIST_DIR}/lib/matrix_leds/ws2812b.pio)
+
+
 # Add any user requested libraries
 target_link_libraries(LoRa 
-        
+        hardware_i2c
+        hardware_pio
+        hardware_timer
+        hardware_clocks
+        hardware_spi
+        hardware_pwm
         )
 
 pico_add_extra_outputs(LoRa)

@@ -8,6 +8,40 @@
 #ifndef RFM95_H
 #define RFM95_H
 
+#include <stdbool.h>
+#include <stdlib.h>
+#include "pico/stdlib.h"
+
+// Prototipos das funções
+static inline void cs_select(void);
+
+static inline void cs_deselect(void);
+
+static void rfm95_write_register(uint8_t reg, uint8_t data);
+
+uint8_t rfm95_read_register(uint8_t addr);
+
+static void rfm95_read_fifo(uint8_t* buffer, uint8_t length);
+
+static void rfm95_write_fifo(const uint8_t* buffer, uint8_t length);
+
+static void rfm95_reset();
+
+void rfm95_sleep_mode();
+
+void rfm95_standby_mode();
+
+void rfm95_tx_mode();
+
+void rfm95_rx_mode();
+
+void rfm95_set_frequency(double Frequency);
+
+bool rfm95_init();
+
+void rfm95_send_data(const char *msg);
+
+bool rfm95_receive_data(char *msg, int max_length);
 
 // Registradores
 #define REG_FIFO                    0x00

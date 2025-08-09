@@ -3,6 +3,7 @@
 #include "hardware/spi.h"
 #include <stdio.h>
 #include <stdbool.h>
+#include <string.h>
 
 
 // Definições pinos SPI e controle
@@ -35,7 +36,7 @@ static void rfm95_write_register(uint8_t reg, uint8_t data) {
 }
 
 // Ler registrador do SX1276
-static uint8_t rfm95_read_register(uint8_t addr) {
+uint8_t rfm95_read_register(uint8_t addr) {
     uint8_t buf[1];
     addr &= 0x7F; // bit 7 = 0 para leitura
 
@@ -63,6 +64,7 @@ static void rfm95_read_fifo(uint8_t* buffer, uint8_t length) {
 // Escreve um bloco de dados na FIFO 
 static void rfm95_write_fifo(const uint8_t* buffer, uint8_t length) {
     uint8_t addr = REG_FIFO | 0x80;
+    printf("Buffer: %s\n", buffer);
     gpio_put(PIN_CS, 0);
     spi_write_blocking(SPI_PORT, &addr, 1);
     spi_write_blocking(SPI_PORT, buffer, length);
@@ -182,7 +184,7 @@ void rfm95_send_data(const char *msg){
 
     rfm95_tx_mode();
 
-    while(!(rmf95_read_register(REG_IRQ_FLAGS) & 0x08)) {
+    while(!(rfm95_read_register(REG_IRQ_FLAGS) & 0x08)) {
         sleep_ms(1);                                    
     }
 
