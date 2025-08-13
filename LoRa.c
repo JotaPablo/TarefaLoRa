@@ -114,8 +114,9 @@ void atualiza_display() {
     snprintf(pressureLine, sizeof(pressureLine), "Pressao: %.1f hPa", pressao);
 
     ssd1306_fill(&ssd, false);
-    draw_centered_text(&ssd, "Estacao Meteor.", 0);
-    ssd1306_draw_string(&ssd, tempLine, 0, 12);
+    draw_centered_text(&ssd, "Estacao", 0);
+    draw_centered_text(&ssd, "Meteorologica", 10);
+    ssd1306_draw_string(&ssd, tempLine, 0, 28);
     ssd1306_draw_string(&ssd, humidityLine, 0, 38);
     ssd1306_draw_string(&ssd, pressureLine, 0, 48);
     ssd1306_send_data(&ssd);
@@ -153,10 +154,14 @@ int main() {
         else {
             if (rfm95_available()) {
                 if (rfm95_receive_data(buffer, 255)){
+                    printf("Buffer: %s\n", buffer);
                     processar_dados_recebidos(buffer);
                     atualiza_display();
                 }
             } 
+            else{
+                printf("Nenhuma mensagem recebida\n");
+            }
         }
 
         sleep_ms(200);

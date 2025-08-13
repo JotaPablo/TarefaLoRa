@@ -64,7 +64,7 @@ static void rfm95_read_fifo(uint8_t* buffer, uint8_t length) {
 // Escreve um bloco de dados na FIFO 
 static void rfm95_write_fifo(const uint8_t* buffer, uint8_t length) {
     uint8_t addr = REG_FIFO | 0x80;
-    printf("Buffer: %s\n", buffer);
+    //printf("Buffer: %s\n", buffer);
     gpio_put(PIN_CS, 0);
     spi_write_blocking(SPI_PORT, &addr, 1);
     spi_write_blocking(SPI_PORT, buffer, length);
